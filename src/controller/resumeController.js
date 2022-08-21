@@ -1,5 +1,4 @@
 const dataModel = require("../Models/resumeModel/resumeModel");
-const secretKey = require("../Models/secretKey");
 const users = require("../Models/userModel");
 
 const getResume = async (req, res, next) => {
@@ -20,17 +19,6 @@ const saveResume = async (req, res, next) => {
   // console.log("start save data!!", req.body);
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
-  const secretData = await secretKey.findOne();
-  // console.log("start update data!!", {
-  //   userData,
-  //   userSecret,
-  //   existUser,
-  //   secretData: secretData.secretKey,
-  // });
-
-  // delete data.secret;
-
-  // const finalData = { ...data, secret: undefined };
 
   try {
     if (
@@ -38,12 +26,9 @@ const saveResume = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-      if (secretData.secretKey !== userSecret) {
-        console.log("secret Key not match!!");
+     
         throw { message: "Unauthorized User!!" };
-      } else {
-        console.log("secretKey match!!");
-      }
+    
     } else {
       console.log("name match!!");
     }
@@ -70,13 +55,7 @@ const deleteResume = async (req, res, next) => {
 
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
-  const secretData = await secretKey.findOne();
-  console.log("start update data!!", {
-    // userData,
-    userSecret,
-    // existUser,
-    secretData: secretData.secretKey,
-  });
+
 
   // delete data.secret;
 
@@ -88,12 +67,9 @@ const deleteResume = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-      if (secretData.secretKey !== userSecret) {
-        console.log("secret Key not match!!");
+    
         throw { message: "Unauthorized User!!" };
-      } else {
-        console.log("secretKey match!!");
-      }
+     
     } else {
       console.log("name match!!");
     }
@@ -114,13 +90,7 @@ const updateResume = async (req, res, next) => {
   let data = req.body;
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
-  const secretData = await secretKey.findOne();
-  console.log("start update data!!", {
-    // userData,
-    userSecret,
-    // existUser,
-    secretData: secretData.secretKey,
-  });
+
 
   delete data.secret;
 
@@ -132,12 +102,9 @@ const updateResume = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-      if (secretData.secretKey !== userSecret) {
-        console.log("secret Key not match!!");
+     
         throw { message: "Unauthorized User!!" };
-      } else {
-        console.log("secretKey match!!");
-      }
+    
     } else {
       console.log("name match!!");
     }
@@ -177,7 +144,6 @@ const getBlogs = async (req, res, next) => {
 const checkCreds = async (req, res, next) => {
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
-  const secretData = await secretKey.findOne();
 
   console.log({
     u1: userData.name,
@@ -196,12 +162,9 @@ const checkCreds = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-      if (secretData.secretKey !== userSecret) {
-        console.log("secret Key not match!!");
+     
         throw { message: "Unauthorized User!!" };
-      } else {
-        console.log("secretKey match!!");
-      }
+     
     } else {
       console.log("name match!!");
     }
@@ -217,7 +180,6 @@ const updateProjectStatus = async (req, res, next) => {
   let data = req.body;
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
-  const secretData = await secretKey.findOne();
 
   console.log("start update data!!", {
     data,
@@ -235,12 +197,9 @@ const updateProjectStatus = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-      if (secretData.secretKey !== userSecret) {
-        console.log("secret Key not match!!");
+    
         throw { message: "Unauthorized User!!" };
-      } else {
-        console.log("secretKey match!!");
-      }
+      
     } else {
       console.log("name match!!");
     }

@@ -5,7 +5,6 @@ const usersController = require("./src/controller/usersController");
 const profileRouter = require("./src/routers/profileRouter.js");
 const resumeRouter = require("./src/routers/resumeRouter");
 const cors = require("cors");
-const secretRouter = require("./src/routers/secretRouters");
 const userRouter = require("./src/routers/userRouter");
 const receviedRouter = require("./src/routers/receivedMessageRouter");
 const app = express();
@@ -27,6 +26,5 @@ app.listen(host, () => {
 
 app.use("/profile", profileRouter);
 app.use("/portfolio", resumeRouter);
-app.use("/secretKey", secretRouter);
 app.use("/user", userRouter);
 app.use("/message", receviedRouter);
