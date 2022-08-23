@@ -1,14 +1,62 @@
 const dataModel = require("../Models/resumeModel/resumeModel");
 const users = require("../Models/userModel");
 
+const updateResumeAbout = async (req, res, next) => {
+  // const id = req.params.id;
+  let data = req.body;
+  const { selectedVal, id } = req.body;
+  const { userData, userSecret } = req.body.secret;
+
+  console.log({ userId: userData.uid, id, selectedVal });
+
+  const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
+  delete data.secret;
+
+  // const finalData = { ...data, secret: undefined };
+
+  try {
+    let resume = await dataModel.findOne({
+      id,
+      module: "about",
+      type: selectedVal,
+      userId: userData.uid,
+    });
+    if (!resume) {
+      console.log("Resume not found!!");
+      resume = await dataModel.create({
+        data,
+        module: "about",
+        type: selectedVal,
+        userId: userData.uid,
+      });
+    } else {
+      resume = await dataModel.findOneAndUpdate(
+        { id },
+        {
+          data,
+        },
+        { new: true }
+      );
+    }
+    console.log("Resume Updated", resume);
+    res.status(200).send(resume);
+  } catch (err) {
+    console.log("Resume Not Updated", err.message);
+    res.status(400).send(err);
+  }
+};
+
 const getResume = async (req, res, next) => {
   try {
+    const { uid } = req.query;
+    console.log("In get", req.query, uid);
     const resume = await dataModel
-      .find()
+      .find({ userId: uid })
       .sort({ createdAt: -1, updatedAt: -1 });
     if (!resume) {
       throw "Resume not found!!";
     }
+    console.log("resume", resume);
     res.status(200).send(resume);
   } catch (err) {
     res.status(400).send(err);
@@ -16,24 +64,15 @@ const getResume = async (req, res, next) => {
 };
 
 const saveResume = async (req, res, next) => {
-  // console.log("start save data!!", req.body);
+  console.log("start save data!!", req.body);
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
 
   try {
-    if (
-      userData.name !== existUser.displayName ||
-      userData.uid !== existUser.uid ||
-      userData.email !== existUser.email
-    ) {
-     
-        throw { message: "Unauthorized User!!" };
-    
-    } else {
-      console.log("name match!!");
-    }
+   
     let resume = await dataModel.create({
       ...req.body,
+      userId: userData.uid,
     });
 
     // resume.save();
@@ -56,7 +95,6 @@ const deleteResume = async (req, res, next) => {
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
 
-
   // delete data.secret;
 
   // const finalData = { ...data, secret: undefined };
@@ -67,9 +105,7 @@ const deleteResume = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-    
-        throw { message: "Unauthorized User!!" };
-     
+      throw { message: "Unauthorized User!!" };
     } else {
       console.log("name match!!");
     }
@@ -91,7 +127,6 @@ const updateResume = async (req, res, next) => {
   const { userData, userSecret } = req.body.secret;
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
 
-
   delete data.secret;
 
   // const finalData = { ...data, secret: undefined };
@@ -102,9 +137,7 @@ const updateResume = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-     
-        throw { message: "Unauthorized User!!" };
-    
+      throw { message: "Unauthorized User!!" };
     } else {
       console.log("name match!!");
     }
@@ -162,9 +195,7 @@ const checkCreds = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-     
-        throw { message: "Unauthorized User!!" };
-     
+      throw { message: "Unauthorized User!!" };
     } else {
       console.log("name match!!");
     }
@@ -197,9 +228,7 @@ const updateProjectStatus = async (req, res, next) => {
       userData.uid !== existUser.uid ||
       userData.email !== existUser.email
     ) {
-    
-        throw { message: "Unauthorized User!!" };
-      
+      throw { message: "Unauthorized User!!" };
     } else {
       console.log("name match!!");
     }
@@ -226,6 +255,8 @@ const updateProjectStatus = async (req, res, next) => {
   }
 };
 
+
+
 module.exports = {
   getResume,
   saveResume,
@@ -234,4 +265,5 @@ module.exports = {
   getBlogs,
   checkCreds,
   updateProjectStatus,
+  updateResumeAbout,
 };
