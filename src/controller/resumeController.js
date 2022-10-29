@@ -1,6 +1,6 @@
 const dataModel = require("../Models/resumeModel/resumeModel");
 const users = require("../Models/userModel");
-
+//done start
 const updateResumeAbout = async (req, res, next) => {
   // const id = req.params.id;
   let data = req.body;
@@ -69,7 +69,6 @@ const saveResume = async (req, res, next) => {
   const existUser = await users.findOne({ email: "sandeepsokle12@gmail.com" });
 
   try {
-   
     let resume = await dataModel.create({
       ...req.body,
       userId: userData.uid,
@@ -87,6 +86,8 @@ const saveResume = async (req, res, next) => {
     res.status(400).send(err.message);
   }
 };
+
+///done end
 
 const deleteResume = async (req, res, next) => {
   const id = req.params.id;
@@ -254,8 +255,6 @@ const updateProjectStatus = async (req, res, next) => {
     res.status(400).send(err);
   }
 };
-
-
 
 module.exports = {
   getResume,
